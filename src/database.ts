@@ -1,7 +1,15 @@
-import { connect, connection } from 'mongoose'
+import { connect } from 'mongoose'
 
-connect(`${process.env.MONGO_URI}/${process.env.MONGO_DB_NAME}?retryWrites=true&w=majority`)
+class Database {
+  private connection: string;
 
-connection.once('open', function() {
-  console.log('MongoDB database connection established successfully')
-})
+  constructor(connection: string) {
+    this.connection = connection
+  }
+
+  connect = () => {
+    return connect(this.connection)
+  }
+}
+
+export default Database

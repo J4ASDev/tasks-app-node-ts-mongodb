@@ -32,13 +32,13 @@ Before you begin, ensure you have met the following requirements:
 1. Clone this repository:
 
    ```bash
-   git clone https://github.com/yourusername/task-app-server.git
+   git clone https://github.com/J4ASDev/tasks-app-node-ts-mongodb.git
    ```
 
 2. Change into the project directory:
 
    ```bash
-   cd task-app-server
+   tasks-app-node-ts-mongodb
    ```
 
 3. Install project dependencies:

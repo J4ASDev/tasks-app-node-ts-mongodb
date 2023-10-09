@@ -5,16 +5,19 @@ import { CreateUserUseCase } from '../application/create-user.usecase';
 import { UsersRepository } from '../domain/users.repository';
 import { GetAllUsersUseCase } from '../application/get-all-users.usecase';
 import { DeleteUserUseCase } from '../application/delete-user.usecase';
+import { GetUserByIdUseCase } from '../application/get-user-by-id.usecase';
 
 export class UsersController {
   private createUserUseCase: CreateUserUseCase;
   private getAllUsersUseCase: GetAllUsersUseCase;
   private deleteUserUseCase: DeleteUserUseCase;
+  private getUserByIdUseCase: GetUserByIdUseCase;
 
   constructor (userRepository: UsersRepository) {
     this.createUserUseCase = new CreateUserUseCase(userRepository)
     this.getAllUsersUseCase = new GetAllUsersUseCase(userRepository)
     this.deleteUserUseCase = new DeleteUserUseCase(userRepository)
+    this.getUserByIdUseCase = new GetUserByIdUseCase(userRepository)
   }
     
   getAllUsers = async (_: Request, response: Response) => {
@@ -57,7 +60,7 @@ export class UsersController {
     if (!id) {
       response
         .status(StatusCodes.BAD_REQUEST)
-        .send({ error: 'Field "id" is missing' })
+        .send({ error: 'Param "id" is missing' })
 
       return
     }
@@ -67,5 +70,24 @@ export class UsersController {
     response
       .status(StatusCodes.ACCEPTED)
       .send({ data: userId })
+  }
+
+
+  getUserById = async (request: Request, response: Response) => {
+    const id = request?.params?.id
+
+    if (!id) {
+      response
+        .status(StatusCodes.BAD_REQUEST)
+        .send({ error: 'Param "id" is missing' })
+
+      return
+    }
+
+    const user = await this.getUserByIdUseCase.execute(id)
+
+    response
+      .status(StatusCodes.ACCEPTED)
+      .send({ data: user })
   }
 }

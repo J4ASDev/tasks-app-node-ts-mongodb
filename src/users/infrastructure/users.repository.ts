@@ -20,4 +20,8 @@ export class UsersRepositoryAdapter implements UsersRepository {
   async deleteUser (id: string) {
     return await this.repository.findByIdAndDelete(id)
   }
+
+  async getUserById(id: string): Promise<User> {
+    return await this.repository.find({ _id: id })
+  }
 }

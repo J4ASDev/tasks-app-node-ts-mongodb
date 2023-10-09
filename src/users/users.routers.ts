@@ -13,6 +13,7 @@ router.route('/users')
   .post(controller.createUser)
 
 router.route('/users/:id')
+  .get(controller.getUserById)  
   .delete(controller.deleteUser)
 
 

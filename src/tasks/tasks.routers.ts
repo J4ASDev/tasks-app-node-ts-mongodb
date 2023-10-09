@@ -14,5 +14,8 @@ router.route('/tasks')
 
 router.route('/tasks/:id')
   .get(controller.getOneTask)
+  .delete(controller.deleteTask)
+  .patch(controller.markAsCompleted)
+  .put(controller.updateTask)
 
 export default router

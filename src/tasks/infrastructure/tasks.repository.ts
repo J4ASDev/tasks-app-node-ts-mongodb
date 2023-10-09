@@ -20,4 +20,18 @@ export class TasksRepositoryAdapter implements TasksRepository {
   async getOneTask(id: string): Promise<Task> {
     return await this.repository.findOne({ _id: id })
   }
+  
+  async deleteTask(id: string): Promise<Task> {
+    return await this.repository.findByIdAndDelete(id);
+  }
+
+  async markAsCompleted(id: string): Promise<string> {
+    await this.repository.updateOne({ _id: id }, { completed: true });
+
+    return id
+  }
+
+  async updateTask(id: string, task: Task): Promise<string> {
+    return await this.repository.findOneAndUpdate({ _id: id }, task)
+  }
 }

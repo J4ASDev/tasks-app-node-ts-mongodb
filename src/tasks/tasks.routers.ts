@@ -9,6 +9,10 @@ const repository = new TasksRepositoryAdapter(db);
 const controller = new TasksController(repository);
 
 router.route('/tasks')
+  .get(controller.getAllTasks)
   .post(controller.createTask)
+
+router.route('/tasks/:id')
+  .get(controller.getOneTask)
 
 export default router

@@ -12,4 +12,12 @@ export class TasksRepositoryAdapter implements TasksRepository {
   async createTask(task: Task) {
     return await this.repository(task).save();
   }
+
+  async getAllTask(): Promise<Task[]> {
+    return await this.repository.find();
+  }
+
+  async getOneTask(id: string): Promise<Task> {
+    return await this.repository.findOne({ _id: id })
+  }
 }

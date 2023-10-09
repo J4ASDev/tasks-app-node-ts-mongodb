@@ -12,7 +12,7 @@ export class UpdateUserUseCase {
     try {
       return await this.userRepository.updateUser(id, user);
     } catch (error) {
-      console.log("Res", error.message)
+      console.log(error)
     }
   }
 }

@@ -5,5 +5,5 @@ export interface UsersRepository {
   createUser(user: User): Promise<User>
   deleteUser(id: string): Promise<User>
   getUserById(id: string): Promise<User>
-  // updateUser(id: ObjectId, user: User): ObjectId
+  updateUser(id: string, user: User): Promise<User>
 }

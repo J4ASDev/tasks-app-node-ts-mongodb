@@ -6,34 +6,37 @@ import { UsersRepository } from '../domain/users.repository';
 import { GetAllUsersUseCase } from '../application/get-all-users.usecase';
 import { DeleteUserUseCase } from '../application/delete-user.usecase';
 import { GetUserByIdUseCase } from '../application/get-user-by-id.usecase';
+import { UpdateUserUseCase } from '../application/update-user-usecase';
 
 export class UsersController {
   private createUserUseCase: CreateUserUseCase;
   private getAllUsersUseCase: GetAllUsersUseCase;
   private deleteUserUseCase: DeleteUserUseCase;
   private getUserByIdUseCase: GetUserByIdUseCase;
+  private updateUserUseCase: UpdateUserUseCase;
 
   constructor (userRepository: UsersRepository) {
-    this.createUserUseCase = new CreateUserUseCase(userRepository)
-    this.getAllUsersUseCase = new GetAllUsersUseCase(userRepository)
-    this.deleteUserUseCase = new DeleteUserUseCase(userRepository)
-    this.getUserByIdUseCase = new GetUserByIdUseCase(userRepository)
+    this.createUserUseCase = new CreateUserUseCase(userRepository);
+    this.getAllUsersUseCase = new GetAllUsersUseCase(userRepository);
+    this.deleteUserUseCase = new DeleteUserUseCase(userRepository);
+    this.getUserByIdUseCase = new GetUserByIdUseCase(userRepository);
+    this.updateUserUseCase  = new UpdateUserUseCase(userRepository);
   }
     
   getAllUsers = async (_: Request, response: Response) => {
-    const users = await this.getAllUsersUseCase.execute()
+    const users = await this.getAllUsersUseCase.execute();
 
     if (users?.length === 0) {
       response
         .status(StatusCodes.NOT_FOUND)
-        .send({ message: 'Not users found.'})
+        .json({ message: 'Not users found.'});
 
       return
     }
 
     response
       .status(StatusCodes.OK)
-      .send({ data: users })
+      .json({ data: users });
   }
 
   createUser = async (request: Request, response: Response) => {
@@ -42,7 +45,7 @@ export class UsersController {
     if (name?.length < 1) {
       response
         .status(StatusCodes.BAD_REQUEST)
-        .json({ message: '"Name" field missing' })
+        .json({ message: '"Name" field missing' });
       
       return
     }
@@ -60,7 +63,7 @@ export class UsersController {
     if (!id) {
       response
         .status(StatusCodes.BAD_REQUEST)
-        .send({ error: 'Param "id" is missing' })
+        .json({ error: 'Param "id" is missing' });
 
       return
     }
@@ -69,7 +72,7 @@ export class UsersController {
 
     response
       .status(StatusCodes.ACCEPTED)
-      .send({ data: userId })
+      .json({ data: userId });
   }
 
 
@@ -79,15 +82,30 @@ export class UsersController {
     if (!id) {
       response
         .status(StatusCodes.BAD_REQUEST)
-        .send({ error: 'Param "id" is missing' })
+        .json({ error: 'Param "id" is missing' });
 
       return
     }
 
-    const user = await this.getUserByIdUseCase.execute(id)
+    const data = await this.getUserByIdUseCase.execute(id)
 
-    response
-      .status(StatusCodes.ACCEPTED)
-      .send({ data: user })
+    response.status(StatusCodes.ACCEPTED).json({ data });
+  }
+
+  updateUser = async (request: Request, response: Response) => {
+    const id = request.params.id;
+    const user = request.body;
+
+    if (Object.keys(user).length === 0) {
+      response
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ error: 'Empty body is not accepted' });
+
+      return
+    }
+
+    const data = await this.updateUserUseCase.execute(id, user);
+
+    response.status(StatusCodes.OK).json({ data });
   }
 }

@@ -24,4 +24,14 @@ export class UsersRepositoryAdapter implements UsersRepository {
   async getUserById(id: string): Promise<User> {
     return await this.repository.find({ _id: id })
   }
+
+  async updateUser(id: string, user: User): Promise<User> {
+    try {
+      return await this.repository.updateOne({ _id: id }, user);
+    } catch (e) {
+      if (e instanceof Error) throw new Error(e.name);
+
+      throw new Error('Internal server error');
+    }
+  }
 }
